@@ -9,6 +9,7 @@ Vagrant.configure("2") do |config|
     config.vm.define name do |node|
       node.vm.box = "ubuntu/jammy64"
       node.vm.network "private_network", ip: ip
+      node.vm.hostname = name
       node.vm.provider "virtualbox" do |vb|
         vb.memory = 2048
         vb.cpus = 2

@@ -1,18 +1,3 @@
-
-# Set hostname from inventory (ansible_hostname)
-- name: Set hostname from inventory
-  ansible.builtin.hostname:
-    name: "{{ ansible_hostname }}"
-  become: true
-
-- name: Reboot after hostname change
-  ansible.builtin.reboot:
-    msg: "Rebooting to apply hostname change"
-    pre_reboot_delay: 3
-    post_reboot_delay: 10
-    reboot_timeout: 600
-  become: true
-
 - name: Install deps
   apt:
     name: [curl, apt-transport-https]

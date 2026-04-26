@@ -1,4 +1,22 @@
+
 ---
+# Apply Traefik Middleware for HTTP to HTTPS redirect
+- name: Apply Traefik Middleware for HTTP to HTTPS redirect
+  kubernetes.core.k8s:
+    state: present
+    namespace: argocd
+    src: traefik-redirect-middleware.yaml
+  environment:
+    KUBECONFIG: /home/vagrant/k3s.yaml
+
+# Apply Traefik Ingress for ArgoCD
+- name: Apply Traefik Ingress for ArgoCD
+  kubernetes.core.k8s:
+    state: present
+    namespace: argocd
+    src: ingress-argocd.yaml
+  environment:
+    KUBECONFIG: /home/vagrant/k3s.yaml
 
 - name: Create argocd namespace
   kubernetes.core.k8s:

@@ -1,3 +1,17 @@
+---
+
+## 🌐 Final Steps for ArgoCD Access via Traefik
+
+1. Add an entry to your local hosts file (replace <K3S_MASTER_IP> with your master node IP):
+
+   ```
+   <K3S_MASTER_IP> argo.domain.local
+   ```
+
+2. Make sure Traefik is enabled in your K3s cluster (it is by default).
+
+3. Access ArgoCD at: [https://argo.domain.local](https://argo.domain.local)
+
 # 🚀 DevOps Pet Project: Kafka Platform on K3s with GitOps
 
 ## 📌 Overview
@@ -37,19 +51,20 @@ The goal is to simulate a real-world DevOps environment with:
 
 ## 🗂️ Project Structure
 
-```text
-.
-├── infra/
-│   ├── Vagrantfile            # VM definitions for K3s cluster nodes
 │   ├── ansible.cfg            # Ansible configuration
-│   ├── inventory.ini          # Ansible inventory (hostnames, IPs)
 │   ├── playbook.yml           # Main Ansible playbook
 │   └── roles/
 │       ├── common/            # Common setup tasks (hostname, deps, Python, etc.)
-│       ├── k3s-master/        # K3s master node installation
-│       ├── k3s-worker/        # K3s worker node join logic
-│       ├── argocd/            # ArgoCD installation and setup
-│       └── kubeconfig/        # Kubeconfig copy and KUBECONFIG setup
+
+### 3. Configure kubectl
+
+```bash
+vagrant ssh master
+sudo cp /etc/rancher/k3s/k3s.yaml /home/vagrant/
+sudo chown vagrant:vagrant /home/vagrant/k3s.yaml
+export KUBECONFIG=~/k3s.yaml
+kubectl get nodes
+```
 │
 ├── platform/
 │   ├── kafka/
@@ -64,13 +79,14 @@ The goal is to simulate a real-world DevOps environment with:
 
 ## ⚙️ Prerequisites
 
+
 Install locally:
 
-- VirtualBox  
-- Vagrant  
-- Ansible  
 ```bash
-- kubectl  
+VirtualBox
+Vagrant
+Ansible
+kubectl
 ```
 
 ---
@@ -79,14 +95,21 @@ Install locally:
 
 ### 1. Start Virtual Machines
 
-cd infra  
 vagrant up  
+
+```bash
+cd infra
+vagrant up
+```
 
 ---
 
 ### 2. Provision Infrastructure
 
-ansible-playbook -i inventory.ini playbook.yml  
+
+```bash
+ansible-playbook -i inventory.ini playbook.yml
+```
 
 ---
 
@@ -94,14 +117,12 @@ ansible-playbook -i inventory.ini playbook.yml
 ### 3. Configure kubectl
 ```
 
-vagrant ssh master  
-
-sudo cp /etc/rancher/k3s/k3s.yaml /home/vagrant/  
-sudo chown vagrant:vagrant /home/vagrant/k3s.yaml  
-export KUBECONFIG=~/k3s.yaml  
-
 ```bash
-kubectl get nodes  
+vagrant ssh master
+sudo cp /etc/rancher/k3s/k3s.yaml /home/vagrant/
+sudo chown vagrant:vagrant /home/vagrant/k3s.yaml
+export KUBECONFIG=~/k3s.yaml
+kubectl get nodes
 ```
 
 ---
@@ -131,11 +152,14 @@ ArgoCD is installed automatically by the Ansible playbook. No manual steps requi
 
 ---
 
+
 ### 6. Access ArgoCD
 
-```bash
-kubectl port-forward svc/argocd-server -n argocd 8080:443  
-```
+ArgoCD is now accessible via Traefik Ingress at:
+
+https://argo.domain.local
+
+_(No need to use `kubectl port-forward`; access is routed through Traefik with the domain name as described in the final steps above.)_
 
 ```bash
 kubectl get secret argocd-initial-admin-secret -n argocd -o yaml  
@@ -173,7 +197,10 @@ kubectl logs deployment/consumer
 
 ## 🧹 Cleanup
 
-vagrant destroy -f  
+
+```bash
+vagrant destroy -f
+```
 
 ---
 
