@@ -34,22 +34,30 @@ The goal is to simulate a real-world DevOps environment with:
 
 ---
 
-## 📁 Project Structure
+## 🗂️ Project Structure
 
+```
 .
 ├── infra/
-│   ├── Vagrantfile
-│   ├── inventory.ini
-│   ├── playbook.yml
+│   ├── Vagrantfile            # VM definitions for K3s cluster nodes
+│   ├── ansible.cfg            # Ansible configuration
+│   ├── inventory.ini          # Ansible inventory (hostnames, IPs)
+│   ├── playbook.yml           # Main Ansible playbook
 │   └── roles/
-│       ├── common/
-│       ├── k3s-master/
-│       └── k3s-worker/
+│       ├── common/            # Common setup tasks (hostname, deps, Python, etc.)
+│       ├── k3s-master/        # K3s master node installation
+│       ├── k3s-worker/        # K3s worker node join logic
+│       ├── argocd/            # ArgoCD installation and setup
+│       └── kubeconfig/        # Kubeconfig copy and KUBECONFIG setup
 │
 ├── platform/
 │   ├── kafka/
-│   │   └── helm/
-│   ├── apps/
+│   │   └── helm/              # Helm chart for Strimzi Kafka deployment
+│   │       ├── Chart.yaml
+│   │       ├── README.md
+│   │       └── values.yaml
+│   └── apps/                  # (Empty, for future workloads)
+```
 
 ---
 
