@@ -34,9 +34,10 @@ The goal is to simulate a real-world DevOps environment with:
 
 ---
 
+
 ## 🗂️ Project Structure
 
-```
+```text
 .
 ├── infra/
 │   ├── Vagrantfile            # VM definitions for K3s cluster nodes
