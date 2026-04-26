@@ -1,0 +1,17 @@
+---
+- name: Debug K3s join token
+  debug:
+    msg: "K3S_TOKEN={{ hostvars['192.168.56.10'].k3s_token }}"
+
+- name: Check master node status
+  shell: "curl -k https://192.168.56.10:6443/healthz"
+  register: master_health
+  ignore_errors: yes
+
+- name: Show master health
+  debug:
+    var: master_health.stdout
+
+- name: Join cluster
+  shell: |
+    curl -sfL https://get.k3s.io | K3S_URL=https://192.168.56.10:6443 K3S_TOKEN={{ hostvars['192.168.56.10'].k3s_token }} sh -

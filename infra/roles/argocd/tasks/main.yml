@@ -1,0 +1,17 @@
+---
+
+- name: Create argocd namespace
+  kubernetes.core.k8s:
+    api_version: v1
+    kind: Namespace
+    name: argocd
+  environment:
+    KUBECONFIG: /home/vagrant/k3s.yaml
+
+- name: Install ArgoCD
+  kubernetes.core.k8s:
+    state: present
+    namespace: argocd
+    src: https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+  environment:
+    KUBECONFIG: /home/vagrant/k3s.yaml

@@ -1,0 +1,12 @@
+---
+- name: Install K3s master
+  shell: |
+    curl -sfL https://get.k3s.io | sh -
+
+- name: Get node token
+  command: cat /var/lib/rancher/k3s/server/node-token
+  register: token
+
+- name: Save token
+  set_fact:
+    k3s_token: "{{ token.stdout }}"

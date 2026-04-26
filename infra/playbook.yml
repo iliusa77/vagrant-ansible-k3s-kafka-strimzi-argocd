@@ -1,0 +1,16 @@
+- hosts: all
+  become: true
+  roles:
+    - common
+
+- hosts: master
+  become: true
+  roles:
+    - k3s-master
+    - kubeconfig
+    - argocd
+
+- hosts: workers
+  become: true
+  roles:
+    - k3s-worker

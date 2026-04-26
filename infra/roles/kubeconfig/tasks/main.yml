@@ -1,0 +1,19 @@
+---
+- name: Copy k3s.yaml to /home/vagrant
+  copy:
+    src: /etc/rancher/k3s/k3s.yaml
+    dest: /home/vagrant/k3s.yaml
+    remote_src: yes
+    owner: vagrant
+    group: vagrant
+    mode: '0644'
+
+- name: Set KUBECONFIG for vagrant user
+  lineinfile:
+    path: /home/vagrant/.bashrc
+    line: 'export KUBECONFIG=~/k3s.yaml'
+    insertafter: EOF
+    state: present
+    owner: vagrant
+    group: vagrant
+    mode: '0644'
